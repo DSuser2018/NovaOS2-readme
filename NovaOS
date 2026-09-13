@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaOS</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+    background: #050816;
+    color: white;
+}
+
+/* =========================
+   LOCK SCREEN
+========================= */
+
+#lockScreen {
+    position: fixed;
+    inset: 0;
+
+    background:
+        radial-gradient(circle at 25% 25%, #2563eb66, transparent 30%),
+        radial-gradient(circle at 75% 70%, #9333ea66, transparent 30%),
+        linear-gradient(135deg, #020617, #111827);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.login-box {
+    width: 350px;
+    padding: 35px;
+
+    text-align: center;
+
+    background: rgba(15,23,42,.78);
+
+    backdrop-filter: blur(25px);
+
+    border-radius: 25px;
+
+    box-shadow: 0 30px 90px #00000099;
+}
+
+.avatar {
+    width: 95px;
+    height: 95px;
+
+    margin: auto;
+    margin-bottom: 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 45px;
+
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #8b5cf6
+    );
+}
+
+.login-box p {
+    color: #94a3b8;
+}
+
+#password {
+    width: 100%;
+
+    padding: 14px;
+
+    background: #020617;
+
+    border: 1px solid #475569;
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 18px;
+
+    text-align: center;
+}
+
+.login-button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background: #1d4ed8;
+}
+
+#error {
+    color: #f87171;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+#desktop {
+    width: 100vw;
+    height: 100vh;
+
+    position: relative;
+
+    background:
+        radial-gradient(circle at 15% 20%, #2563eb55, transparent 30%),
+        radial-gradient(circle at 80% 75%, #9333ea55, transparent 30%),
+        linear-gradient(135deg, #0f172a, #111827);
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    background: rgba(15,23,42,.85);
+
+    backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid #ffffff15;
+}
+
+.logo {
+    font-weight: bold;
+}
+
+.system-info {
+    display: flex;
+    gap: 15px;
+
+    color: #cbd5e1;
+}
+
+/* =========================
+   DESKTOP ICONS
+========================= */
+
+.desktop-icons {
+
+    position: absolute;
+
+    top: 65px;
+    left: 20px;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 90px);
+
+    gap: 20px;
+
+}
+
+.desktop-icon {
+
+    width: 85px;
+
+    padding: 8px;
+
+    text-align: center;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+}
+
+.desktop-icon:hover {
+    background: #ffffff18;
+}
+
+.desktop-icon .emoji {
+    font-size: 38px;
+}
+
+.desktop-icon span {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 12px;
+}
+
+/* =========================
+   WINDOWS
+========================= */
+
+.window {
+
+    position: absolute;
+
+    top: 90px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 700px;
+    max-width: 90vw;
+
+    height: 480px;
+    max-height: 70vh;
+
+    background: #111827;
+
+    border: 1px solid #475569;
+
+    border-radius: 15px;
+
+    box-shadow: 0 30px 90px #000000aa;
+
+    overflow: hidden;
+
+    display: none;
+
+    z-index: 50;
+}
+
+.window-header {
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 12px;
+
+    background: #1e293b;
+
+    cursor: move;
+}
+
+.window-title {
+    font-weight: bold;
+}
+
+.close {
+
+    width: 22px;
+    height: 22px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #ef4444;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.window-content {
+
+    padding: 20px;
+
+    height: calc(100% - 45px);
+
+    overflow: auto;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-container {
+
+    position: absolute;
+
+    bottom: 80px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 450px;
+
+    max-width: 80%;
+
+}
+
+#searchBox {
+
+    width: 100%;
+
+    padding: 15px 20px;
+
+    border-radius: 25px;
+
+    border: 1px solid #64748b;
+
+    background: rgba(15,23,42,.85);
+
+    backdrop-filter: blur(20px);
+
+    color: white;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+/* =========================
+   TASKBAR
+========================= */
+
+.taskbar {
+
+    position: absolute;
+
+    bottom: 0;
+
+    left: 0;
+
+    right: 0;
+
+    height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    background: rgba(15,23,42,.92);
+
+    backdrop-filter: blur(25px);
+
+    border-top: 1px solid #ffffff15;
+
+}
+
+.taskbar button {
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    padding: 8px;
+
+    border-radius: 10px;
+}
+
+.taskbar button:hover {
+    background: #ffffff18;
+}
+
+/* =========================
+   START MENU
+========================= */
+
+#startMenu {
+
+    position: absolute;
+
+    bottom: 75px;
+
+    left: 15px;
+
+    width: 320px;
+
+    padding: 15px;
+
+    background: rgba(15,23,42,.97);
+
+    backdrop-filter: blur(25px);
+
+    border: 1px solid #475569;
+
+    border-radius: 18px;
+
+    display: none;
+
+    z-index: 200;
+}
+
+.start-item {
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.start-item:hover {
+    background: #334155;
+}
+
+/* =========================
+   FILES
+========================= */
+
+.file {
+
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    background: #1e293b;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.file:hover {
+    background: #334155;
+}
+
+/* =========================
+   NOTES
+========================= */
+
+textarea {
+
+    width: 100%;
+
+    height: 300px;
+
+    background: #020617;
+
+    color: white;
+
+    border: 1px solid #475569;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    font-size: 16px;
+
+    resize: none;
+}
+
+/* =========================
+   CALCULATOR
+========================= */
+
+#display {
+
+    width: 100%;
+
+    height: 60px;
+
+    background: #020617;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    margin-bottom: 12px;
+
+    padding: 10px;
+
+    text-align: right;
+
+    font-size: 25px;
+}
+
+.calculator {
+
+    display: grid;
+
+    grid-template-columns: repeat(4,1fr);
+
+    gap: 8px;
+}
+
+.calculator button {
+
+    padding: 18px;
+
+    background: #334155;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+.calculator button:hover {
+    background: #475569;
+}
+
+/* =========================
+   TERMINAL
+========================= */
+
+.terminal {
+
+    background: black;
+
+    color: #22c55e;
+
+    height: 330px;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    font-family: monospace;
+
+    overflow: auto;
+}
+
+.terminal-input {
+
+    background: transparent;
+
+    border: none;
+
+    outline: none;
+
+    color: #22c55e;
+
+    font-family: monospace;
+}
+
+/* =========================
+   BROWSER
+========================= */
+
+.browser-bar {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.browser-bar input {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    border: none;
+
+    background: #020617;
+
+    color: white;
+}
+
+.browser-bar button {
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #3b82f6;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.browser-page {
+
+    height: 300px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #111827;
+
+    padding: 30px;
+
+}
+
+/* =========================
+   GAMES
+========================= */
+
+.game-card {
+
+    padding: 20px;
+
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+
+    background: #1e293b;
+
+    cursor: pointer;
+}
+
+.game-card:hover {
+    background: #334155;
+}
+
+/* =========================
+   STORE
+========================= */
+
+.store-card {
+
+    padding: 20px;
+
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+
+    background: #1e293b;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.store-card button {
+
+    background: #22c55e;
+
+    border: none;
+
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+/* =========================
+   GALLERY
+========================= */
+
+.gallery {
+
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 10px;
+}
+
+.photo {
+
+    height: 120px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #9333ea
+    );
+
+    font-size: 40px;
+}
+
+/* =========================
+   POWER MENU
+========================= */
+
+#powerMenu {
+
+    position: absolute;
+
+    bottom: 75px;
+
+    right: 15px;
+
+    width: 220px;
+
+    padding: 15px;
+
+    background: #111827;
+
+    border: 1px solid #475569;
+
+    border-radius: 15px;
+
+    display: none;
+
+    z-index: 300;
+}
+
+.power-item {
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.power-item:hover {
+    background: #334155;
+}
+
+/* =========================
+   SCREENSHOT GALLERY
+========================= */
+
+.screenshot-image {
+
+    width: 100%;
+
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+
+    background: #020617;
+
+    padding: 10px;
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     LOCK SCREEN
+========================= -->
+
+<div id="lockScreen">
+
+    <div class="login-box">
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <h1>NovaOS</h1>
+
+        <p>Welcome back</p>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            onkeydown="checkEnter(event)"
+        >
+
+        <button
+            class="login-button"
+            onclick="login()">
+
+            🔓 Sign In
+
+        </button>
+
+        <p id="error"></p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     DESKTOP
+========================= -->
+
+<div id="desktop">
+
+
+    <div class="topbar">
+
+        <div class="logo">
+            🚀 NovaOS
+        </div>
+
+        <div class="system-info">
+
+            <span>📶</span>
+
+            <span>🔋 100%</span>
+
+            <span id="clock"></span>
+
+        </div>
+
+    </div>
+
+
+    <!-- DESKTOP ICONS -->
+
+    <div class="desktop-icons">
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('games')">
+
+            <div class="emoji">🎮</div>
+
+            <span>Games</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('chrome')">
+
+            <div class="emoji">🌐</div>
+
+            <span>Chrome</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('gemini')">
+
+            <div class="emoji">✨</div>
+
+            <span>Gemini</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('store')">
+
+            <div class="emoji">🛍️</div>
+
+            <span>Store</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('photos')">
+
+            <div class="emoji">📸</div>
+
+            <span>Photos</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('screenshots')">
+
+            <div class="emoji">🖼️</div>
+
+            <span>Screenshots</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('files')">
+
+            <div class="emoji">📁</div>
+
+            <span>Files</span>
+
+        </div>
+
+
+        <div
+            class="desktop-icon"
+            onclick="openWindow('notes')">
+
+            <div class="emoji">📝</div>
+
+            <span>Notes</span>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-container">
+
+        <input
+            id="searchBox"
+            placeholder="🔎 Type here to search"
+            onkeydown="search(event)"
+        >
+
+    </div>
+
+
+    <!-- =========================
+         GAMES
+    ========================= -->
+
+    <div
+        class="window"
+        id="games">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                🎮 Games
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('games')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <h2>Nova Games</h2>
+
+            <div
+                class="game-card"
+                onclick="playNumberGame()">
+
+                🎯 Guess the Number
+
+            </div>
+
+            <div
+                class="game-card"
+                onclick="alert('🚀 Space game coming soon!')">
+
+                🚀 Space Explorer
+
+            </div>
+
+            <div
+                class="game-card"
+                onclick="alert('🏎️ Racing game coming soon!')">
+
+                🏎️ Nova Racing
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CHROME
+    ========================= -->
+
+    <div
+        class="window"
+        id="chrome">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                🌐 Nova Chrome
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('chrome')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <div class="browser-bar">
+
+                <input
+                    id="browserInput"
+                    placeholder="Search the web..."
+                >
+
+                <button onclick="browserSearch()">
+                    Search
+                </button>
+
+            </div>
+
+            <div
+                class="browser-page"
+                id="browserPage">
+
+                <h1>🌐 Nova Browser</h1>
+
+                <p>
+                    Search for something above.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         GEMINI
+    ========================= -->
+
+    <div
+        class="window"
+        id="gemini">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                ✨ Gemini
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('gemini')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <h2>✨ Nova AI</h2>
+
+            <p>
+                Ask Nova a question.
+            </p>
+
+            <input
+                id="aiInput"
+                style="
+                width:100%;
+                padding:14px;
+                border-radius:10px;
+                border:none;
+                background:#020617;
+                color:white;
+                "
+                placeholder="Type your question..."
+            >
+
+            <button
+                onclick="askAI()"
+                style="
+                margin-top:10px;
+                padding:12px;
+                border:none;
+                border-radius:8px;
+                background:#8b5cf6;
+                color:white;
+                cursor:pointer;
+                ">
+
+                Ask
+
+            </button>
+
+            <div id="aiAnswer"
+                 style="margin-top:20px">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         STORE
+    ========================= -->
+
+    <div
+        class="window"
+        id="store">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                🛍️ Nova Store
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('store')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <h2>App Store</h2>
+
+            <div class="store-card">
+
+                <span>
+                    🎮 Super Game
+                </span>
+
+                <button
+                    onclick="installApp('Super Game')">
+
+                    Install
+
+                </button>
+
+            </div>
+
+            <div class="store-card">
+
+                <span>
+                    🎵 Music Player
+                </span>
+
+                <button
+                    onclick="installApp('Music Player')">
+
+                    Install
+
+                </button>
+
+            </div>
+
+            <div class="store-card">
+
+                <span>
+                    🌦️ Weather
+                </span>
+
+                <button
+                    onclick="installApp('Weather')">
+
+                    Install
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PHOTOS
+    ========================= -->
+
+    <div
+        class="window"
+        id="photos">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                📸 Photos
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('photos')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <h2>📸 Photo Gallery</h2>
+
+            <div class="gallery">
+
+                <div class="photo">🌄</div>
+
+                <div class="photo">🌌</div>
+
+                <div class="photo">🌲</div>
+
+                <div class="photo">🏙️</div>
+
+                <div class="photo">🌊</div>
+
+                <div class="photo">🌅</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SCREENSHOTS
+    ========================= -->
+
+    <div
+        class="window"
+        id="screenshots">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                🖼️ Screenshot Gallery
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('screenshots')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <h2>🖼️ Screenshots</h2>
+
+            <p>
+                Press <b>PrtSc</b> or
+                <b>Print Screen</b> to take a screenshot.
+            </p>
+
+            <div id="screenshotGallery">
+
+                <p style="color:#94a3b8">
+                    No screenshots yet.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FILES
+    ========================= -->
+
+    <div
+        class="window"
+        id="files">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                📁 File Explorer
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('files')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <h2>Quick Access</h2>
+
+            <div class="file">
+                📄 Welcome.txt
+            </div>
+
+            <div class="file">
+                📁 Documents
+            </div>
+
+            <div class="file">
+                📁 Pictures
+            </div>
+
+            <div class="file">
+                🎵 Music
+            </div>
+
+            <div class="file">
+                🗑️ Trash
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         NOTES
+    ========================= -->
+
+    <div
+        class="window"
+        id="notes">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                📝 Notes
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('notes')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <textarea
+                id="notesText"
+                placeholder="Type your notes here...">
+            </textarea>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CALCULATOR
+    ========================= -->
+
+    <div
+        class="window"
+        id="calculator">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                🧮 Calculator
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('calculator')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <input
+                id="display"
+                readonly
+            >
+
+            <div class="calculator">
+
+                <button onclick="add('7')">7</button>
+                <button onclick="add('8')">8</button>
+                <button onclick="add('9')">9</button>
+                <button onclick="add('/')">÷</button>
+
+                <button onclick="add('4')">4</button>
+                <button onclick="add('5')">5</button>
+                <button onclick="add('6')">6</button>
+                <button onclick="add('*')">×</button>
+
+                <button onclick="add('1')">1</button>
+                <button onclick="add('2')">2</button>
+                <button onclick="add('3')">3</button>
+                <button onclick="add('-')">−</button>
+
+                <button onclick="add('0')">0</button>
+                <button onclick="add('.')">.</button>
+                <button onclick="calculate()">=</button>
+                <button onclick="add('+')">+</button>
+
+                <button onclick="clearCalculator()">
+                    C
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         TERMINAL
+    ========================= -->
+
+    <div
+        class="window"
+        id="terminal">
+
+        <div class="window-header">
+
+            <span class="window-title">
+                💻 Terminal
+            </span>
+
+            <button
+                class="close"
+                onclick="closeWindow('terminal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="window-content">
+
+            <div class="terminal">
+
+                NovaOS Terminal v1.0<br>
+                Type "help" for commands.<br><br>
+
+                <span id="terminalOutput">
+                    nova@computer:~$
+                </span>
+
+                <input
+                    class="terminal-input"
+                    id="terminalInput"
+                    onkeydown="terminalCommand(event)"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         START MENU
+    ========================= -->
+
+    <div id="startMenu">
+
+        <h2>🚀 NovaOS</h2>
+
+        <div
+            class="start-item"
+            onclick="openWindow('games')">
+
+            🎮 Games
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('chrome')">
+
+            🌐 Chrome
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('gemini')">
+
+            ✨ Gemini
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('store')">
+
+            🛍️ Store
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('photos')">
+
+            📸 Photos
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('screenshots')">
+
+            🖼️ Screenshot Gallery
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('files')">
+
+            📁 Files
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('notes')">
+
+            📝 Notes
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('calculator')">
+
+            🧮 Calculator
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="openWindow('terminal')">
+
+            💻 Terminal
+
+        </div>
+
+        <div
+            class="start-item"
+            onclick="lockComputer()">
+
+            🔒 Lock
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         POWER MENU
+    ========================= -->
+
+    <div id="powerMenu">
+
+        <h3>Power</h3>
+
+        <div
+            class="power-item"
+            onclick="lockComputer()">
+
+            🔒 Lock
+
+        </div>
+
+        <div
+            class="power-item"
+            onclick="restartComputer()">
+
+            🔄 Restart
+
+        </div>
+
+        <div
+            class="power-item"
+            onclick="shutdownComputer()">
+
+            ⏻ Shut down
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SEARCH
+    ========================= -->
+
+    <div class="taskbar">
+
+        <button onclick="toggleStart()">
+            🚀
+        </button>
+
+        <button onclick="openWindow('files')">
+            📁
+        </button>
+
+        <button onclick="openWindow('chrome')">
+            🌐
+        </button>
+
+        <button onclick="openWindow('gemini')">
+            ✨
+        </button>
+
+        <button onclick="openWindow('games')">
+            🎮
+        </button>
+
+        <button onclick="openWindow('screenshots')">
+            🖼️
+        </button>
+
+        <button onclick="togglePower()">
+            ⏻
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =========================
+   PASSWORD
+========================= */
+
+const correctPassword = "1267";
+
+
+function login() {
+
+    const password =
+        document.getElementById("password").value;
+
+    if (password === correctPassword) {
+
+        document.getElementById(
+            "lockScreen"
+        ).style.display = "none";
+
+        document.getElementById(
+            "error"
+        ).textContent = "";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "error"
+        ).textContent =
+            "❌ Incorrect password";
+
+    }
+
+}
+
+
+function checkEnter(event) {
+
+    if (event.key === "Enter") {
+
+        login();
+
+    }
+
+}
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock() {
+
+    const now = new Date();
+
+    document.getElementById(
+        "clock"
+    ).textContent =
+        now.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
+
+
+/* =========================
+   WINDOWS
+========================= */
+
+function openWindow(id) {
+
+    document.getElementById(id)
+        .style.display = "block";
+
+    document.getElementById(
+        "startMenu"
+    ).style.display = "none";
+
+}
+
+
+function closeWindow(id) {
+
+    document.getElementById(id)
+        .style.display = "none";
+
+}
+
+
+/* =========================
+   START MENU
+========================= */
+
+function toggleStart() {
+
+    const menu =
+        document.getElementById("startMenu");
+
+    menu.style.display =
+        menu.style.display === "block"
+        ? "none"
+        : "block";
+
+}
+
+
+/* =========================
+   POWER
+========================= */
+
+function togglePower() {
+
+    const menu =
+        document.getElementById("powerMenu");
+
+    menu.style.display =
+        menu.style.display === "block"
+        ? "none"
+        : "block";
+
+}
+
+
+function restartComputer() {
+
+    location.reload();
+
+}
+
+
+function shutdownComputer() {
+
+    document.getElementById(
+        "desktop"
+    ).style.display = "none";
+
+    alert(
+        "⏻ NovaOS has been shut down."
+    );
+
+}
+
+
+/* =========================
+   CALCULATOR
+========================= */
+
+function add(value) {
+
+    document.getElementById(
+        "display"
+    ).value += value;
+
+}
+
+
+function clearCalculator() {
+
+    document.getElementById(
+        "display"
+    ).value = "";
+
+}
+
+
+function calculate() {
+
+    const display =
+        document.getElementById("display");
+
+    try {
+
+        display.value =
+            Function(
+                "return " +
+                display.value
+            )();
+
+    }
+
+    catch {
+
+        display.value = "Error";
+
+    }
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function search(event) {
+
+    if (event.key !== "Enter") {
+        return;
+    }
+
+    const query =
+        document.getElementById(
+            "searchBox"
+        ).value;
+
+    if (query.trim() === "") {
+        return;
+    }
+
+    alert(
+        "🔎 NovaOS Search\n\nSearching for: " +
+        query
+    );
+
+}
+
+
+/* =========================
+   BROWSER
+========================= */
+
+function browserSearch() {
+
+    const query =
+        document.getElementById(
+            "browserInput"
+        ).value;
+
+    if (!query) {
+        return;
+    }
+
+    document.getElementById(
+        "browserPage"
+    ).innerHTML = `
+
+        <h1>🔎 Search</h1>
+
+        <p>
+            You searched for:
+        </p>
+
+        <h2>
+            ${query}
+        </h2>
+
+        <p>
+            This is the NovaOS browser simulator.
+        </p>
+
+    `;
+
+}
+
+
+/* =========================
+   AI
+========================= */
+
+function askAI() {
+
+    const question =
+        document.getElementById(
+            "aiInput"
+        ).value;
+
+    const answer =
+        document.getElementById(
+            "aiAnswer"
+        );
+
+    if (!question) {
+        return;
+    }
+
+    answer.innerHTML = `
+
+        <div style="
+            background:#1e293b;
+            padding:15px;
+            border-radius:10px;
+        ">
+
+        <b>You:</b>
+        ${question}
+
+        <br><br>
+
+        <b>Nova AI:</b>
+        I'm a demo AI inside NovaOS.
+        A real AI connection can be added later!
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   STORE
+========================= */
+
+function installApp(name) {
+
+    alert(
+        "✅ " +
+        name +
+        " has been installed!"
+    );
+
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+function playNumberGame() {
+
+    const number =
+        Math.floor(
+            Math.random() * 10
+        ) + 1;
+
+    const guess =
+        prompt(
+            "🎯 Guess a number from 1 to 10"
+        );
+
+    if (
+        Number(guess) === number
+    ) {
+
+        alert(
+            "🎉 You won!"
+        );
+
+    }
+
+    else {
+
+        alert(
+            "❌ Not this time!\n\n" +
+            "The number was " +
+            number
+        );
+
+    }
+
+}
+
+
+/* =========================
+   TERMINAL
+========================= */
+
+function terminalCommand(event) {
+
+    if (event.key !== "Enter") {
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "terminalInput"
+        );
+
+    const output =
+        document.getElementById(
+            "terminalOutput"
+        );
+
+    const command =
+        input.value
+        .trim()
+        .toLowerCase();
+
+
+    if (command === "help") {
+
+        output.innerHTML +=
+            "<br>help - Commands" +
+            "<br>time - Current time" +
+            "<br>about - About NovaOS" +
